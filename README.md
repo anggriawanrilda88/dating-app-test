@@ -37,3 +37,10 @@ dating-app <br />
 ------------------------routes <br />
 ------------------------transformers <br />
 
+# Getting Started
+Clone the repository: `git clone git@github.com:anggriawanrilda88/dating-app-test.git` <br />
+Setup Tools use Makefile: `make setup-tools`<br />
+this will help to install hot reload, and migrate tools for golang<br />
+Create file .env: `all variable needed can see on file .env.example`<br />
+Migrate database: `make migration-up` this command will migrate all table used, ensure the connection database on .env file correct<br />
+Run development with hot reload: `make run-dev` this command will run hot reload golang api<br />
