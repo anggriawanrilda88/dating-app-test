@@ -2,9 +2,11 @@ package entities
 
 import (
 	"errors"
+	"os"
 	"time"
 
 	vo_user "github.com/dating-app-test/src/domain/value_object/user"
+	"github.com/dgrijalva/jwt-go"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"golang.org/x/crypto/bcrypt"
@@ -12,11 +14,12 @@ import (
 
 type User struct {
 	BaseEntity
-	id        uint64
-	email     string
-	password  string
-	status    vo_user.UserStatus
-	deletedAt *time.Time
+	id          uint64
+	email       string
+	password    string
+	status      vo_user.UserStatus
+	deletedAt   *time.Time
+	accessToken string
 }
 
 func (v *User) GetID() uint64               { return v.id }
@@ -42,7 +45,31 @@ func (v *User) GetHashVerifyPassword(hashedPassword string) error {
 	return nil
 }
 
+func (v *User) GetAccessToken() string {
+	return v.accessToken
+}
+
+func (v *User) SetAccessToken() error {
+	//Creating Access Token
+	atClaims := jwt.MapClaims{}
+	atClaims["authorized"] = true
+	atClaims["exp"] = time.Now().Add(time.Minute * 43200).Unix() // 1 day expired
+	atClaims["id"] = v.id
+	atClaims["email"] = v.email
+	atClaims["status"] = v.status
+	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
+	accessToken, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	if err != nil {
+		return err
+	}
+
+	v.accessToken = accessToken
+
+	return nil
+}
+
 func (v *User) GetStatus() vo_user.UserStatus { return v.status }
+func (v *User) GetStatusString() string       { return string(v.status) }
 func (v *User) GetDeletedAt() *time.Time      { return v.deletedAt }
 func (v *User) MarkAsDeleted() {
 	timeNow := time.Now()
@@ -106,6 +133,7 @@ func MakeUser(
 			createdAt:  createdAt,
 			updatedAt:  updatedAt,
 		},
+		id:        id,
 		email:     email,
 		password:  password,
 		status:    status,

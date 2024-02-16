@@ -7,11 +7,14 @@ import (
 	"github.com/dating-app-test/src/infra/helpers"
 	"github.com/dating-app-test/src/interface/rest/response"
 	"github.com/dating-app-test/src/interface/rest/v1/mobile_app/requests"
+	"github.com/dating-app-test/src/interface/rest/v1/mobile_app/transformers"
 	"github.com/gin-gonic/gin"
 )
 
 type UserHandler interface {
 	RegistrationUser(c *gin.Context)
+	LoginUser(c *gin.Context)
+	GetUser(c *gin.Context)
 }
 
 type userHandler struct {
@@ -47,4 +50,40 @@ func (h *userHandler) RegistrationUser(c *gin.Context) {
 	}
 
 	response.ResponseJSON(c, "User successfully registered", nil)
+}
+
+// Login user
+func (h *userHandler) LoginUser(c *gin.Context) {
+	req := requests.LoginUser{}
+	dto, err := req.Validate(c)
+	if err != nil {
+		response.ErrorHandler(c, err)
+		return
+	}
+
+	userEntity, err := h.usecase.LoginUser(c.Request.Context(), dto)
+	if err != nil {
+		response.ErrorHandler(c, err)
+		return
+	}
+
+	response.ResponseJSON(c, "User successfully login", transformers.LoginTransform(userEntity))
+}
+
+// Get user
+func (h *userHandler) GetUser(c *gin.Context) {
+	req := requests.GetUser{}
+	dto, err := req.Validate(c)
+	if err != nil {
+		response.ErrorHandler(c, err)
+		return
+	}
+
+	userEntity, err := h.usecase.GetUser(c.Request.Context(), dto)
+	if err != nil {
+		response.ErrorHandler(c, err)
+		return
+	}
+
+	response.ResponseJSON(c, "Successfully get user", transformers.GetUserTransform(userEntity))
 }

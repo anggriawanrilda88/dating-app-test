@@ -11,6 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const apiName = "dating-app-test"
+
 func CheckHealth(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "check_success",
@@ -26,7 +28,7 @@ func NewRoutes(r *gin.Engine, token *jwt.Token, services *postgresql.Repositorie
 
 func MobileAppRouteV1(r *gin.Engine, token *jwt.Token, services *postgresql.Repositories, helpers *helpers.Helpers) {
 	// route v1 group
-	api := r.Group("/dating-app-test/api/v1")
+	api := r.Group("/" + apiName + "/api/v1")
 
 	// handlers
 	userHandler := handler_mb_app_v1.NewUserHandler(services.Users, token, helpers)

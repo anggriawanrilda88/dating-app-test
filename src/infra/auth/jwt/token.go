@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -9,7 +10,6 @@ import (
 	"time"
 
 	"github.com/dating-app-test/src/domain/entities"
-	// "github.com/dating-app-test/domain/repository"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/twinj/uuid"
@@ -50,7 +50,7 @@ func (t *Token) CreateToken(user *entities.User, roleCode *string) (*TokenDetail
 	return td, nil
 }
 
-func TokenValid(r *http.Request, routeAlias string) (jwt.MapClaims, error) {
+func TokenValid(r *http.Request) (jwt.MapClaims, error) {
 	token, err := VerifyToken(r)
 	if err != nil {
 		return nil, err
@@ -67,6 +67,11 @@ func TokenValid(r *http.Request, routeAlias string) (jwt.MapClaims, error) {
 
 func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	tokenString := ExtractToken(r)
+
+	if tokenString == "" {
+		return nil, errors.New("forbidden access")
+	}
+
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		//Make sure that the token method conform to "SigningMethodHMAC"
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -91,7 +96,6 @@ func ExtractToken(r *http.Request) string {
 }
 
 func (t *Token) ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
-	fmt.Println("WE ENTERED METADATA")
 	token, err := VerifyToken(r)
 	if err != nil {
 		return nil, err

@@ -17,6 +17,8 @@ type userApp struct {
 
 type UserAppInterface interface {
 	RegistrationUser(ctx context.Context, dto *dto.RegistrationUserDTO) error
+	LoginUser(ctx context.Context, dto *dto.LoginUserDTO) (*entities.User, error)
+	GetUser(ctx context.Context, dto *dto.GetUserDTO) (*entities.User, error)
 }
 
 func NewUsers(us repositories.UserRepository, h *helpers.Helpers) UserAppInterface {
@@ -37,4 +39,33 @@ func (u *userApp) RegistrationUser(ctx context.Context, dto *dto.RegistrationUse
 	}
 
 	return u.us.SaveUser(newUser)
+}
+
+func (u *userApp) LoginUser(ctx context.Context, dto *dto.LoginUserDTO) (*entities.User, error) {
+	newUser, err := u.us.GetUserByEmail(dto.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	err = newUser.GetHashVerifyPassword(dto.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	// set token from email password
+	err = newUser.SetAccessToken()
+	if err != nil {
+		return nil, err
+	}
+
+	return newUser, nil
+}
+
+func (u *userApp) GetUser(ctx context.Context, dto *dto.GetUserDTO) (*entities.User, error) {
+	newUser, err := u.us.GetUser(dto.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return newUser, nil
 }

@@ -9,7 +9,7 @@ CREATE TABLE users (
     constraint users_pkey primary key (id)
 );
 
-CREATE INDEX users_email_index ON users(email);
+CREATE UNIQUE INDEX users_email_index ON users(email);
 
 CREATE INDEX users_password_index ON users(password);
 

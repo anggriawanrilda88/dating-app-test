@@ -6,8 +6,6 @@ import (
 
 type UserRepository interface {
 	SaveUser(*entities.User) error
-	UpdateUser(*entities.User) error
-	GetUser(string) (*entities.User, error)
+	GetUser(id uint64) (*entities.User, error)
 	GetUserByEmail(email string) (*entities.User, error)
-	GetUserByEmailAndPassword(*entities.User) (*entities.User, *string, error)
 }

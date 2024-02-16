@@ -1,13 +1,10 @@
 package postgresql
 
 import (
-	"errors"
-
 	"github.com/dating-app-test/src/domain/entities"
 	"github.com/dating-app-test/src/domain/repositories"
 	"github.com/dating-app-test/src/infra/models"
 
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -34,57 +31,21 @@ func (r *UsersRepo) SaveUser(user *entities.User) error {
 	return nil
 }
 
-func (r *UsersRepo) UpdateUser(user *entities.User) error {
-	tx := r.db.Begin()
-	err := tx.Model(&user).Updates(&user).Error
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	tx.Commit()
-	return nil
-}
-
-func (r *UsersRepo) GetUser(id string) (*entities.User, error) {
-	var user entities.User
-	err := r.db.Joins("RoleAssignments").
-		Joins("Stations").Where(`"users"."id" = ?`, id).Take(&user).Error
+func (r *UsersRepo) GetUser(id uint64) (*entities.User, error) {
+	var model models.User
+	err := r.db.Where(`"users"."id" = ?`, id).Take(&model).Error
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return model.ToEntity(), nil
 }
 
 func (r *UsersRepo) GetUserByEmail(email string) (*entities.User, error) {
-	var user entities.User
-	err := r.db.Where(`"users"."email" = ?`, email).Take(&user).Error
+	var model models.User
+	err := r.db.Where(`"users"."email" = ?`, email).Take(&model).Error
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
-}
 
-func (r *UsersRepo) GetUserByEmailAndPassword(u *entities.User) (*entities.User, *string, error) {
-	var user entities.User
-	err := r.db.Where("email = ?", u.GetEmail()).Take(&user).Error
-	if err != nil {
-		return nil, nil, errors.New("database error")
-	}
-	//Verify the password
-	err = user.GetHashVerifyPassword(u.GetPassword())
-	if err != nil {
-		return nil, nil, err
-	}
-	// get role
-	var roleCode string
-	err = r.db.Raw(`
-	select rl.code from role_assignments as ra 
-	join roles as rl on ra.role_id = rl.id where user_id = $1`, user.GetID()).Scan(&roleCode).Error
-
-	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-		return nil, nil, err
-	}
-
-	return &user, &roleCode, nil
+	return model.ToEntity(), nil
 }

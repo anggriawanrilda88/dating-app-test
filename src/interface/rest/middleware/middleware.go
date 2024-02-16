@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleware(routeAlias string) gin.HandlerFunc {
+func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		claimsMap, err := jwt.TokenValid(c.Request, routeAlias)
+		claimsMap, err := jwt.TokenValid(c.Request)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"status": http.StatusUnauthorized,
@@ -20,23 +20,10 @@ func AuthMiddleware(routeAlias string) gin.HandlerFunc {
 			return
 		}
 
-		// assign userId to param
-		c.Params = append(c.Params, gin.Param{
-			Key:   "userId",
-			Value: claimsMap["user_id"].(string),
-		})
-
-		// assign user role code to param
-		c.Params = append(c.Params, gin.Param{
-			Key:   "email",
-			Value: claimsMap["email"].(string),
-		})
-
-		// assign user name
-		c.Params = append(c.Params, gin.Param{
-			Key:   "status",
-			Value: claimsMap["status"].(string),
-		})
+		// set params to context
+		c.Set("userID", claimsMap["id"])
+		c.Set("email", claimsMap["email"])
+		c.Set("status", claimsMap["status"])
 
 		c.Next()
 	}
