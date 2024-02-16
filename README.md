@@ -58,7 +58,7 @@ Run development with hot reload: `make run-dev` this command will run hot reload
 
 
 # API Example
-There are three api example in this app for testing reasong:
+There are three api example in this app for testing reasong:<br />
 `POST   /dating-app-test/api/v1/users`          ==> api for registration new user dating app.<br />
 `POST   /dating-app-test/api/v1/users/login`    ==> api for login user and get token access.<br />
 `GET    /dating-app-test/api/v1/users/:id`      ==> api to get detail user by id, validate with middleware authentication with jwt token access needed.<br />
