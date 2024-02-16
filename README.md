@@ -7,7 +7,7 @@ This application is developed following the principles of Domain-Driven Design (
 # Show Of Structure
 
 dating-app <br />
-----integration_test <br />
+----postman_test <br />
 ----migrations <br />
 ----src <br />
 --------app <br />
@@ -38,7 +38,7 @@ dating-app <br />
 ------------------------transformers <br />
 
 # Makefile For Development and Deployment
-here include Makefile to run some command for development and deployment you can see the command bellow:<br /><br />
+Here include Makefile to run some command for development and deployment you can see the command bellow:<br /><br />
 `make bin` ==> this command to create folder bin <br />
 `make setup-tools` ==> this command to install hot reload bin and migrate bin <br />
 `make migration-create` ==> this command to create folder migrations and create file migration with name <br />
@@ -55,3 +55,13 @@ Setup Tools use Makefile: `make setup-tools` this will help to install hot reloa
 Create file .env: `all variable needed can see on file .env.example`<br /><br />
 Migrate database: `make migration-up` this command will migrate all table used, ensure the connection database on .env file correct<br /><br />
 Run development with hot reload: `make run-dev` this command will run hot reload golang api<br /><br />
+
+
+# API Example
+There are three api example in this app for testing reasong:
+`POST   /dating-app-test/api/v1/users`          ==> api for registration new user dating app.<br />
+`POST   /dating-app-test/api/v1/users/login`    ==> api for login user and get token access.<br />
+`GET    /dating-app-test/api/v1/users/:id`      ==> api to get detail user by id, validate with middleware authentication with jwt token access needed.<br />
+
+# POSTMAN TEST
+Folder postman_test contains test case files that can run on postman test.

@@ -59,6 +59,12 @@ func (req *GetUser) Validate(c *gin.Context) (*dto.GetUserDTO, error) {
 	}
 	req.ID = id
 
+	// validate with userId from token so cannot access other user by id
+	userID, _ := c.Get("userID")
+	if uint64(userID.(float64)) != id {
+		return nil, errors.New("no access with id param")
+	}
+
 	return &dto.GetUserDTO{
 		ID: req.ID,
 	}, nil
