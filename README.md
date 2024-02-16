@@ -5,34 +5,35 @@ Welcome to the Dating App! This application is testing app that designed to conn
 This application is developed following the principles of Domain-Driven Design (DDD). DDD promotes a modular and structured approach to building software by organizing code around the business domain.
 
 # Show Of Structure
-dating-app
-----integration_test
-----migrations
-----src
---------app
-------------dto
-------------usecase
---------domain
-------------entities
-------------repositories
-------------value_object
-----------------user
---------infra
-------------auth
-----------------jwt
-------------constants
-------------helpers
-------------models
-------------persistence
-----------------postgresql
---------interface
-------------rest
-----------------middleware
-----------------response
-----------------v1
---------------------mobile_app
-------------------------handlers
-------------------------requests
-------------------------routes
-------------------------transformers
+
+dating-app <br />
+----integration_test <br />
+----migrations <br />
+----src <br />
+--------app <br />
+------------dto <br />
+------------usecase <br />
+--------domain <br />
+------------entities <br />
+------------repositories <br />
+------------value_object <br />
+----------------user <br />
+--------infra <br />
+------------auth <br />
+----------------jwt <br />
+------------constants <br />
+------------helpers <br />
+------------models <br />
+------------persistence <br />
+----------------postgresql <br />
+--------interface <br />
+------------rest <br />
+----------------middleware <br />
+----------------response <br />
+----------------v1 <br />
+--------------------mobile_app <br />
+------------------------handlers <br />
+------------------------requests <br />
+------------------------routes <br />
+------------------------transformers <br />
 
