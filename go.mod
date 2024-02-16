@@ -6,9 +6,8 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
+	github.com/go-playground/assert/v2 v2.2.0
 	github.com/go-redis/redis/v7 v7.4.1
-	github.com/gofrs/uuid v4.4.0+incompatible
-	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/joho/godotenv v1.5.1
 	github.com/twinj/uuid v1.0.0
 	golang.org/x/crypto v0.14.0
