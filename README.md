@@ -37,10 +37,21 @@ dating-app <br />
 ------------------------routes <br />
 ------------------------transformers <br />
 
+# Makefile For Development and Deployment
+here include Makefile to run some command for development and deployment you can see the command bellow:<br /><br />
+`make bin` ==> this command to create folder bin <br />
+`make setup-tools` ==> this command to install hot reload bin and migrate bin <br />
+`make migration-create` ==> this command to create folder migrations and create file migration with name <br />
+`make migration-up` ==> this command to execute all sql query from migration file <br />
+`make migration-down` ==> this command to remove all sql query from migration file <br />
+`make run-dev` ==> this command to run hot reload for development <br />
+`make run` ==>  this command to run go file<br />
+`make build` ==>  this command to build golang become binary file or executable file<br />
+
+
 # Quick Setup
 Clone the repository: `git clone git@github.com:anggriawanrilda88/dating-app-test.git` <br /><br />
-Setup Tools use Makefile: `make setup-tools`<br /><br />
-this will help to install hot reload, and migrate tools for golang<br /><br />
+Setup Tools use Makefile: `make setup-tools` this will help to install hot reload, and migrate tools for golang<br /><br />
 Create file .env: `all variable needed can see on file .env.example`<br /><br />
 Migrate database: `make migration-up` this command will migrate all table used, ensure the connection database on .env file correct<br /><br />
 Run development with hot reload: `make run-dev` this command will run hot reload golang api<br /><br />
